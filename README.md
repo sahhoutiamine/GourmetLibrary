@@ -1,59 +1,50 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# GourmetLibrary API Documentation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Bienvenue dans l'API de **GourmetLibrary**, la médiathèque culinaire.
 
-## About Laravel
+## 🛠 Configuration rapide
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+*   **Serveur** : Lancez le serveur avec `php artisan serve`.
+*   **Base de données** : SQLite par défaut. `php artisan migrate --seed` a déjà été exécuté.
+*   **Postman** : Importer le fichier `GourmetLibrary.postman_collection.json`.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 👥 Rôles Utilisateurs
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+*   **Admin** (`role: admin`) : Peut tout faire.
+*   **Reader (Gourmand)** (`role: reader`) : Consulter et rechercher des livres.
 
-## Learning Laravel
+### 🔑 Comptes de test (Seedés)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Nom | Email | Mot de passe | Rôle |
+| :--- | :--- | :--- | :--- |
+| Chef Bibliothécaire | admin@gourmet.com | password | admin |
+| Amine Gourmand | reader@gourmet.com | password | reader |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🛣 Endpoints
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 🔐 Authentification
+*   `POST /api/register` : Inscription
+*   `POST /api/login` : Connexion (retourne un token Bearer)
+*   `POST /api/logout` : Déconnexion (auth requis)
 
-### Premium Partners
+### 📚 Catégories
+*   `GET /api/categories` : Liste toutes les catégories.
+*   `GET /api/categories/{id}` : Détails d'une catégorie.
+*   `GET /api/categories/{id}/books` : Livres d'une catégorie. *(En tant que gourmand, je souhaite consulter la liste des livres de cuisine disponibles dans une catégorie)*
+*   `POST /api/categories` (**Admin**) : Créer une catégorie.
+*   `PUT /api/categories/{id}` (**Admin**) : Modifier une catégorie.
+*   `DELETE /api/categories/{id}` (**Admin**) : Supprimer une catégorie.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 📖 Livres
+*   `GET /api/books` : Liste tous les livres (supporte `?new_arrivals=1` ou `?popular=1`). *(En tant que gourmand, je souhaite voir les livres les plus populaires ou les nouveaux arrivages)*
+*   `GET /api/books/search?q={term}` : Rechercher par titre, auteur ou catégorie. *(En tant que gourmand, je veux pouvoir rechercher un livre par son titre, son auteur ou sa catégorie)*
+*   `POST /api/books` (**Admin**) : Ajouter un livre (crée automatiquement les copies).
+*   `PUT /api/books/{id}` (**Admin**) : Modifier un livre.
+*   `DELETE /api/books/{id}` (**Admin**) : Supprimer un livre.
+*   `PUT /api/books/{bookId}/copies/{copyId}` (**Admin**) : Mettre à jour l'état d'un exemplaire. *(En tant qu'administrateur, je souhaite pouvoir voir la quantité de livres dégradés)*
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 📊 Statistiques (Admin Uniquement)
+*   `GET /api/stats/dashboard` : État global de la collection, livres populaires, répartition par catégorie. *(En tant qu'administrateur, je veux visualiser des statistiques sur la collection)*
+*   `GET /api/stats/degraded` : Rapport sur les livres dégradés/tachés. *(Quantité de livres dégradés pour planifier leur réparation)*
