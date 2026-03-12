@@ -19,10 +19,9 @@ class BookController extends Controller
         }
 
         if ($request->has('popular')) {
-            // Logic for popular books (most borrowed)
-            // For now, let's just return all, will refine if needed
-            $query->withCount('copies')
-                  ->orderBy('copies_count', 'desc');
+            $query->withCount(['copies as borrow_count' => function ($q) {
+                $q->whereHas('borrows');
+            }])->orderBy('borrow_count', 'desc');
         }
 
         return response()->json($query->get());
