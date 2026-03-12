@@ -1,0 +1,6 @@
+# Use this workspace to collaborate
+workspace:
+  id: 6da6cd9c-a54f-4744-87aa-4554375e43a1
+localResources:
+  collections:
+    - ..\GourmetLibrary.postman_collection.json
