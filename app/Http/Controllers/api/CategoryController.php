@@ -53,10 +53,15 @@ class CategoryController extends Controller
         return response()->json(['message' => 'Category deleted successfully']);
     }
 
-    public function books(string $id)
+    public function books(Request $request, string $id)
     {
         $category = Category::findOrFail($id);
-        $books = $category->books()->with('category')->get();
-        return response()->json($books);
+        $query = $category->books()->with('category');
+
+        if ($request->has('title')) {
+            $query->where('title', 'LIKE', '%' . $request->title . '%');
+        }
+
+        return response()->json($query->get());
     }
 }
