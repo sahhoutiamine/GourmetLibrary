@@ -24,6 +24,10 @@ class BookController extends Controller
             }])->orderBy('borrow_count', 'desc');
         }
 
+        if ($request->has('title')) {
+            $query->where('title', 'LIKE', '%' . $request->title . '%');
+        }
+
         return response()->json($query->get());
     }
 
@@ -108,6 +112,10 @@ class BookController extends Controller
                       $c->where('name', 'LIKE', "%$q%");
                   });
             });
+        }
+
+        if ($request->has('title')) {
+            $query->where('title', 'LIKE', '%' . $request->title . '%');
         }
 
         return response()->json($query->get());
