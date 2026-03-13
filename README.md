@@ -32,14 +32,14 @@ Bienvenue dans l'API de **GourmetLibrary**, la médiathèque culinaire.
 ### 📚 Catégories
 *   `GET /api/categories` : Liste toutes les catégories.
 *   `GET /api/categories/{id}` : Détails d'une catégorie.
-*   `GET /api/categories/{id}/books` : Livres d'une catégorie. *(En tant que gourmand, je souhaite consulter la liste des livres de cuisine disponibles dans une catégorie)*
+*   `GET /api/categories/{id}/books` : Livres d'une catégorie (supporte `?title={term}`). *(En tant que gourmand, je souhaite consulter la liste des livres de cuisine disponibles dans une catégorie)*
 *   `POST /api/categories` (**Admin**) : Créer une catégorie.
 *   `PUT /api/categories/{id}` (**Admin**) : Modifier une catégorie.
 *   `DELETE /api/categories/{id}` (**Admin**) : Supprimer une catégorie.
 
 ### 📖 Livres
-*   `GET /api/books` : Liste tous les livres (supporte `?new_arrivals=1` ou `?popular=1`). *(En tant que gourmand, je souhaite voir les livres les plus populaires ou les nouveaux arrivages)*
-*   `GET /api/books/search?q={term}` : Rechercher par titre, auteur ou catégorie. *(En tant que gourmand, je veux pouvoir rechercher un livre par son titre, son auteur ou sa catégorie)*
+*   `GET /api/books` : Liste tous les livres (supporte `?new_arrivals=1`, `?popular=1` ou `?title={term}`). *(En tant que gourmand, je souhaite voir les livres les plus populaires ou les nouveaux arrivages)*
+*   `GET /api/books/search?q={term}` : Rechercher par titre, auteur ou catégorie (supporte aussi `?title={term}` pour recherche spécifique). *(En tant que gourmand, je veux pouvoir rechercher un livre par son titre, son auteur ou sa catégorie)*
 *   `POST /api/books` (**Admin**) : Ajouter un livre (crée automatiquement les copies).
 *   `PUT /api/books/{id}` (**Admin**) : Modifier un livre.
 *   `DELETE /api/books/{id}` (**Admin**) : Supprimer un livre.
